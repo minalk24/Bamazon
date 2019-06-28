@@ -1,10 +1,11 @@
-//git
+
 var inquirer = require("inquirer");
 var Table = require('cli-table');
 var Chalk = require("chalk");
 
 var customer = {};
 
+//do you want shopping ? then run function
 customer.DoYouWantShopping = function () {
 
   inquirer.prompt([{
@@ -103,6 +104,7 @@ customer.DoYouWantShopping = function () {
   });
 }
 
+//function for checking stock available or not
 customer.isProductStockAvailable = function (productID, quantity) {
 
   customer.connection.query("SELECT * FROM products WHERE ?",
@@ -174,6 +176,7 @@ customer.placeAnOrder = function(productID, quantity, updatedStock, newProductSa
   });
 }
 
+//order message display
 customer.showOrderMessage = function(productID,quantity){
 
   //get the product information from the database
