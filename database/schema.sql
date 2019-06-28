@@ -1,8 +1,15 @@
-USE bamazon_DB;
+DROP DATABASE IF EXISTS bamazon_DB; 
 
-INSERT INTO products(product_name, department_name, price, stock_quantity) VALUES
-("orange Juice","beverages",10.00,500),
-("cheerios","breakfast & cereal",6.89,100),
-("brownie bites","bakery",12.99,70),
-("chicken broth","canned goods",9.99,140),
-("Cookies","bakery",12.99,70);
+CREATE DATABASE bamazon_DB; 
+
+USE bamazon_DB; 
+
+CREATE TABLE products(
+    product_id INTEGER AUTO_INCREMENT NOT NULL,
+    product_name VARCHAR(50) NOT NULL,
+    department_name VARCHAR(30) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    stock_quantity INTEGER NOT NULL,
+    product_sales DECIMAL(10,2) DEFAULT 0,
+    PRIMARY KEY(product_id)
+);
