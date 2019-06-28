@@ -139,15 +139,33 @@ customer.isProductStockAvailable = function (productID, quantity) {
           name: "doBuy",
           default: false
         }]).then(function (answer) {
+          if (answer.doBuy)
+            customer.placeAnOrder(productID, quantity, updatedStock, newProductSale);
 
-
+          else
+            customer.DoYouWantShopping();
         });
 
       }
     });
 }
 
+//place an order function
+customer.placeAnOrder = function(productID, quantity, updatedStock, newProductSale){
 
+  customer.connection.query("UPDATE products SET ? WHERE ?",
+  [{
+      stock_quantity:updatedStock,
+      product_sales:newProductSale
+  },
+  {
+      product_id:productID
+  }],
+  function(err,res){
+
+      if(err) throw err;
+  });
+}
 
 //export customer object
 module.exports = customer;
