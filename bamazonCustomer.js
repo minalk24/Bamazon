@@ -164,6 +164,29 @@ customer.placeAnOrder = function(productID, quantity, updatedStock, newProductSa
   function(err,res){
 
       if(err) throw err;
+
+      if(res.affectedRows === 1)
+          customer.showOrderMessage(productID,quantity);
+      else{
+          console.log(Chalk.red("Sorry! Could not place your order due to technical issue, Try again!\n"));
+          customer.DoYouWantShopping();
+      }
+  });
+}
+
+customer.showOrderMessage = function(productID,quantity){
+
+  //get the product information from the database
+  customer.connection.query("SELECT product_name, price FROM products WHERE ?",
+  [{
+      product_id:productID
+  }],
+  function(err,res){
+
+      if(err) throw err;
+
+      console.log(Chalk.bold("Your order of "+ quantity+ " "+res[0].product_name + " was successfully placed for $"+ (res[0].price*quantity).toFixed(2)+" !!!\n"))
+      customer.DoYouWantShopping();
   });
 }
 
