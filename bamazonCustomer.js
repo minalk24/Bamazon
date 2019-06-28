@@ -70,7 +70,7 @@ customer.DoYouWantShopping = function () {
                       console.log(Chalk.red("Invalid Product ID\n"));
                       customer.DoYouWantShopping();
                     }
-                    
+
                     else {
 
                       //ask user quantity
@@ -102,6 +102,52 @@ customer.DoYouWantShopping = function () {
     }
   });
 }
+
+customer.isProductStockAvailable = function (productID, quantity) {
+
+  customer.connection.query("SELECT * FROM products WHERE ?",
+    [{
+      product_id: productID
+    }], function (err, res) {
+
+      if (err) throw err;
+
+      if (res[0].stock_quantity < quantity) {
+        console.log(Chalk.red("Insufficient Stock: Only " + res[0].stock_quantity + " left in stock\n"));
+        customer.DoYouWantShopping();
+      }
+
+      else {
+
+        var updatedStock = res[0].stock_quantity - quantity;
+
+        var newProductSale = res[0].product_sales + res[0].price * quantity;
+
+        //order details
+        console.log("\n-------------------------------")
+        console.log("Product: " + res[0].product_name)
+        console.log("Department: " + res[0].department_name)
+        console.log("Quantity: " + quantity);
+        console.log("Price/Unit: " + res[0].price);
+        console.log("Total Price: " + (res[0].price * quantity).toFixed(2));
+        console.log("----------------------------------\n")
+
+        //ask for order confirmation
+        inquirer.prompt([{
+          message: "Are you sure, you want to place the order?",
+          type: "confirm",
+          name: "doBuy",
+          default: false
+        }]).then(function (answer) {
+
+
+        });
+
+      }
+    });
+}
+
+
 
 //export customer object
 module.exports = customer;
